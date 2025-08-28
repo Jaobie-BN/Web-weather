@@ -1,0 +1,41 @@
+services:
+  # ========================
+  # 1. Collector Service
+  # ========================
+  - type: worker
+    name: weather-collector
+    rootDir: collector
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: MONGO_URI
+        value: "mongodb+srv://<username>:<password>@<cluster>.mongodb.net/weatherdb"
+      - key: OPENWEATHER_API_KEY
+        sync: false   # จะให้กรอกเองใน Dashboard Render
+
+  # ========================
+  # 2. Backend API Service
+  # ========================
+  - type: web
+    name: weather-backend
+    rootDir: backend
+    dockerfilePath: ./Dockerfile
+    plan: free
+    envVars:
+      - key: MONGO_URI
+        value: "mongodb+srv://<username>:<password>@<cluster>.mongodb.net/weatherdb"
+      - key: PORT
+        value: "4000"
+
+  # ========================
+  # 3. Frontend Service
+  # ========================
+  - type: web
+    name: weather-frontend
+    rootDir: frontend
+    dockerfilePath: ./Dockerfile
+    plan: free
+    envVars:
+      - key: PORT
+        value: "3000"
+      - key: BACKEND_URL
+        value: "https://weather-backend.onrender.com"   # URL ของ backend บน Render
