@@ -1,13 +1,16 @@
-import React from "react";   // 👈 เพิ่มบรรทัดนี้
+import React from "react"; // 👈 เพิ่มบรรทัดนี้
 import { useEffect, useState } from "react";
 
 export default function App() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/weather`)
-      .then((res) => res.json())
-      .then(setData);
+    const url = `${import.meta.env.VITE_BACKEND_URL}/api/weather`;
+    console.log("Fetch URL:", url);
+    fetch(url)
+      .then((r) => r.json())
+      .then(setData)
+      .catch((e) => console.error("Fetch error:", e));
   }, []);
 
   return (
