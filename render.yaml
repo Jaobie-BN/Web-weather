@@ -10,9 +10,7 @@ services:
     plan: free
     envVars:
       - key: MONGO_URI
-        sync: false   # ให้กรอกใน Render Dashboard
-      - key: OPENWEATHER_API_KEY
-        sync: false   # ให้กรอกใน Render Dashboard
+        sync: false   # กรอกใน Render Dashboard
       - key: PORT
         value: "4000"
 
@@ -28,5 +26,5 @@ services:
     envVars:
       - key: PORT
         value: "3000"
-      - key: BACKEND_URL
-        value: "https://weather-backend.onrender.com"
+      - key: VITE_BACKEND_URL
+        value: "https://weather-backend-8suu.onrender.com"

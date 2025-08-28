@@ -3,6 +3,7 @@ import { MongoClient } from "mongodb";
 import cors from "cors";
 import axios from "axios";
 import cron from "node-cron";
+import { weatherCodeMap } from "./weatherCodes.js";  // 👈 import mapping
 
 const app = express();
 app.use(cors());
@@ -10,19 +11,20 @@ app.use(cors());
 const PORT = process.env.PORT || 4000;
 const MONGO_URI = process.env.MONGO_URI;
 const DB_NAME = "weatherdb";
-const API_KEY = process.env.OPENWEATHER_API_KEY;
-const CITY = "Bangkok";
 
-// ====== Cron job (รันทุก 30 นาที) ======
+// ====== Cron job ======
 async function fetchWeather() {
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${CITY}&appid=${API_KEY}&units=metric`;
+  const url =
+    "https://api.open-meteo.com/v1/forecast?latitude=13.75&longitude=100.5167&current_weather=true";
   const res = await axios.get(url);
+  const cw = res.data.current_weather;
+
   return {
-    city: CITY,
-    temp: res.data.main.temp,
-    humidity: res.data.main.humidity,
-    weather: res.data.weather[0].description,
-    timestamp: new Date(),
+    city: "Bangkok",
+    temp: cw.temperature,
+    windspeed: cw.windspeed,
+    weather: weatherCodeMap[cw.weathercode] || "Unknown",
+    timestamp: new Date(cw.time),
   };
 }
 
@@ -42,13 +44,14 @@ cron.schedule("*/30 * * * *", async () => {
     console.error("❌ Error:", err.message);
   }
 });
-// =======================================
+// =======================
 
 // REST API
 app.get("/api/weather", async (req, res) => {
   const client = new MongoClient(MONGO_URI);
   await client.connect();
-  const data = await client.db(DB_NAME)
+  const data = await client
+    .db(DB_NAME)
     .collection("weather")
     .find({})
     .sort({ timestamp: -1 })
