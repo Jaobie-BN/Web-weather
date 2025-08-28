@@ -41,24 +41,16 @@ export default function App() {
   }, []);
 
   const getWeatherIcon = (weather) => {
-    switch (weather.toLowerCase()) {
-      case "clear":
-        return "☀️";
-      case "partly cloudy":
-        return "⛅";
-      case "cloudy":
-        return "☁️";
-      case "rain":
-        return "🌧️";
-      case "light rain":
-        return "🌦️";
-      case "thunderstorm":
-        return "⛈️";
-      case "snow":
-        return "❄️";
-      default:
-        return "🌤️";
-    }
+    if (!weather) return "🌤️";
+    const w = weather.toLowerCase();
+    if (w.includes("clear")) return "☀️";
+    if (w.includes("partly") || w.includes("mainly")) return "⛅";
+    if (w.includes("overcast") || w.includes("cloud")) return "☁️";
+    if (w.includes("thunder")) return "⛈️";
+    if (w.includes("snow")) return "❄️";
+    if (w.includes("drizzle") || w.includes("rain")) return "🌧️";
+    if (w.includes("fog")) return "🌫️";
+    return "🌤️";
   };
 
   const formatChartTime = (timeString) => {

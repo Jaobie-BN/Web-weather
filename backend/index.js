@@ -69,7 +69,7 @@ app.get("/api/forecast-24h", async (req, res) => {
   try {
     const url =
       "https://api.open-meteo.com/v1/forecast?latitude=13.75&longitude=100.5167" +
-      "&hourly=temperature_2m,relative_humidity_2m,precipitation,weathercode,windspeed_10m" +
+      "&hourly=temperature_2m,relative_humidity_2m,precipitation,precipitation_probability,weathercode,windspeed_10m" +
       "&forecast_days=2&timezone=Asia%2FBangkok";
 
     const r = await axios.get(url);
