@@ -1,15 +1,11 @@
-// frontend/src/App.jsx
+import React from "react";   // 👈 เพิ่มบรรทัดนี้
 import { useEffect, useState } from "react";
 
 export default function App() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch(
-      `${
-        import.meta.env.VITE_BACKEND_URL || "http://localhost:4000"
-      }/api/weather`
-    )
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/weather`)
       .then((res) => res.json())
       .then(setData);
   }, []);
