@@ -5,8 +5,12 @@ export default function App() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:4000/api/weather")
-      .then(res => res.json())
+    fetch(
+      `${
+        import.meta.env.VITE_BACKEND_URL || "http://localhost:4000"
+      }/api/weather`
+    )
+      .then((res) => res.json())
       .then(setData);
   }, []);
 
